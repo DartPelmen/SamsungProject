@@ -7,12 +7,9 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-import org.joda.time.LocalTime;
-
-import java.util.Date;
 import java.util.UUID;
 @Entity(tableName = "Hour",foreignKeys = @ForeignKey(entity = TimeTable.class,parentColumns = "idTimeTable",childColumns = "TimeTableId",onDelete = ForeignKey.CASCADE,onUpdate = ForeignKey.CASCADE))
-public class Hour {
+public class Hour{
     @NonNull
     @PrimaryKey
     @ColumnInfo(name="idHour")

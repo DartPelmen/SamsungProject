@@ -12,7 +12,7 @@ import java.util.UUID;
 
 
 @Entity(tableName = "Day",foreignKeys = @ForeignKey(entity = Week.class,parentColumns = "idWeek",childColumns = "WeekId",onDelete = ForeignKey.CASCADE,onUpdate = ForeignKey.CASCADE))
-public class Day {
+public class Day{
     @NonNull
     @PrimaryKey
     @ColumnInfo(name = "idDay")

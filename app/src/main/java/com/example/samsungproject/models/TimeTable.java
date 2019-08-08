@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 import java.util.UUID;
 
 @Entity(tableName = "TimeTable")
-public class TimeTable {
+public class TimeTable{
 
     @NonNull
     @PrimaryKey

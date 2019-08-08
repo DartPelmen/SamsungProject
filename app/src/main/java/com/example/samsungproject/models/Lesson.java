@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey;
 import java.util.UUID;
 
 @Entity(tableName = "Lesson",foreignKeys = @ForeignKey(entity = Day.class,parentColumns = "idDay",childColumns = "DayId",onDelete = ForeignKey.CASCADE,onUpdate = ForeignKey.CASCADE))
-public class Lesson {
+public class Lesson{
     @NonNull
     @PrimaryKey
     @ColumnInfo(name="idLesson")
