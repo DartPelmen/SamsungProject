@@ -8,8 +8,6 @@ import androidx.room.PrimaryKey;
 
 import org.joda.time.LocalDate;
 
-import java.util.Calendar;
-import java.util.Locale;
 import java.util.UUID;
 
 
