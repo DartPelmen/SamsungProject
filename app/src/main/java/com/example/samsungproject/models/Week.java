@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey;
 import java.util.UUID;
 
 @Entity(tableName = "Week",foreignKeys = @ForeignKey(entity = TimeTable.class,parentColumns = "idTimeTable",childColumns = "TimeTableId",onDelete = ForeignKey.CASCADE,onUpdate = ForeignKey.CASCADE))
-public class Week extends AbstractModel{
+public class Week{
     @NonNull
     @PrimaryKey
     @ColumnInfo(name = "idWeek")

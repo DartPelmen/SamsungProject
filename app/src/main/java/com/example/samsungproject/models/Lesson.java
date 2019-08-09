@@ -16,7 +16,7 @@ public class Lesson{
     private String id;
     @NonNull
     @ColumnInfo(name="number")
-    private int number;
+    private String number;
     @NonNull
     @ColumnInfo(name="title")
     private String title;
@@ -25,7 +25,7 @@ public class Lesson{
     @ColumnInfo(name="DayId")
     private String dayId;
 
-    public Lesson( int number, @NonNull String title, String description, String dayId) {
+    public Lesson( String number, @NonNull String title, String description, String dayId) {
         this.id =UUID.randomUUID().toString().replace("-","").toUpperCase();
         this.number = number;
         this.title = title;
@@ -42,11 +42,11 @@ public class Lesson{
         this.id = id;
     }
 
-    public int getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 

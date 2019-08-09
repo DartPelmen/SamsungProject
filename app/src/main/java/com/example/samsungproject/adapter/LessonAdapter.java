@@ -2,6 +2,7 @@ package com.example.samsungproject.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,20 +11,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.samsungproject.DayActivity;
+import com.example.samsungproject.LessonInfoActivity;
 import com.example.samsungproject.R;
-import com.example.samsungproject.models.Week;
+import com.example.samsungproject.models.Lesson;
 
 import java.util.List;
 
-public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.ViewHolder> {
+public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder> {
+
     private LayoutInflater inflater;
 
-    private List<Week> weeks;
+    private List<Lesson> lessons;
 
-    public WeekAdapter(Context context, List<Week> weeks) {
+    public LessonAdapter(Context context, List<Lesson> lessons) {
         this.inflater = LayoutInflater.from(context);
-        this.weeks = weeks;
+        this.lessons = lessons;
+        Log.i("SIZEOF ADAPTER LESSONS", String.valueOf(lessons.size()));
     }
 
     @NonNull
@@ -35,37 +38,40 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Week week=weeks.get(position);
-
-        holder.title.setText(String.valueOf(week.getTitle()));
+        Lesson lesson=lessons.get(position);
+        String s=lessons.get(position).getId()+" "+lessons.get(position).getTitle()+" "+lessons.get(position).getNumber()+" "+lessons.get(position).getDescription();
+        Log.i("INFO ABOUT LESSON",s);
+        holder.title.setText(String.valueOf(lesson.getTitle()));
+        holder.time.setText(String.valueOf(lesson.getNumber()));
     }
 
     @Override
     public int getItemCount() {
-        return weeks.size();
+        return lessons.size();
     }
 
-    public void addItem(Week week){
-        weeks.add(week);
-        notifyDataSetChanged();
-    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final Context context;
 
-        TextView title;
+        TextView title, time;
         ViewHolder(View view){
             super(view);
             title =view.findViewById(R.id.title);
+            time =view.findViewById(R.id.time);
             view.setOnClickListener(this);
             context=view.getContext();
         }
         @Override
         public void onClick(View view) {
             int pos=getAdapterPosition();
-            String s=weeks.get(pos).getId();
-            Intent i=new Intent(view.getContext(), DayActivity.class);
+            String s=lessons.get(pos).getId();
+            Log.i("ID ",s);
+            Intent i=new Intent(view.getContext(), LessonInfoActivity.class);
             i.putExtra("id",s);
-            i.putExtra("title",weeks.get(pos).getTitle());
+            i.putExtra("number",lessons.get(pos).getNumber());
+            i.putExtra("title",lessons.get(pos).getTitle());
+            i.putExtra("description",lessons.get(pos).getDescription());
             context.startActivity(i);
         }
     }

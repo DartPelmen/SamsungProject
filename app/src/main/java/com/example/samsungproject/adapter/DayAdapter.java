@@ -11,68 +11,66 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.samsungproject.LessonInfoActivity;
+import com.example.samsungproject.LessonActivity;
 import com.example.samsungproject.R;
-import com.example.samsungproject.models.Lesson;
+import com.example.samsungproject.models.Day;
 
 import java.util.List;
 
 public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
 
+
     private LayoutInflater inflater;
 
-    private List<Lesson> lessons;
+    private List<Day> days;
 
-    public DayAdapter(Context context, List<Lesson> lessons) {
+    public DayAdapter(Context context, List<Day> days) {
         this.inflater = LayoutInflater.from(context);
-        this.lessons = lessons;
-        Log.i("SIZEOF ADAPTER LESSONS", String.valueOf(lessons.size()));
+        this.days = days;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.day_list_activity, parent, false);
+        View view = inflater.inflate(R.layout.day_list_layout, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Lesson lesson=lessons.get(position);
-        String s=lessons.get(position).getId()+" "+lessons.get(position).getTitle()+" "+lessons.get(position).getNumber()+" "+lessons.get(position).getDescription();
-        Log.i("INFO ABOUT LESSON",s);
-        holder.lessonNum.setText(String.valueOf(lesson.getNumber()));
-        holder.lessonTitle.setText(String.valueOf(lesson.getTitle()));
+        Day day=days.get(position);
+        holder.title.setText(String.valueOf(day.getDayT()));
     }
 
     @Override
     public int getItemCount() {
-        return lessons.size();
+        return days.size();
     }
 
-
+    public void addItem(Day day){
+        days.add(day);
+        notifyDataSetChanged();
+    }
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final Context context;
 
-        TextView lessonNum, lessonTitle;
+        TextView title;
         ViewHolder(View view){
             super(view);
-            lessonNum =view.findViewById(R.id.lessonNum);
-            lessonTitle =view.findViewById(R.id.lessonTitle);
+            title=view.findViewById(R.id.title);
             view.setOnClickListener(this);
             context=view.getContext();
         }
         @Override
         public void onClick(View view) {
             int pos=getAdapterPosition();
-            String s=lessons.get(pos).getId();
+            String s=days.get(pos).getId();
             Log.i("ID ",s);
-            Intent i=new Intent(view.getContext(), LessonInfoActivity.class);
+            Intent i=new Intent(view.getContext(), LessonActivity.class);
             i.putExtra("id",s);
-            i.putExtra("number",lessons.get(pos).getNumber());
-            i.putExtra("title",lessons.get(pos).getTitle());
-            i.putExtra("description",lessons.get(pos).getDescription());
             context.startActivity(i);
         }
     }
+
+
 }

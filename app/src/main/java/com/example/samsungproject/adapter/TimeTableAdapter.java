@@ -46,7 +46,10 @@ public class TimeTableAdapter extends RecyclerView.Adapter<TimeTableAdapter.View
         return timeTables.size();
     }
 
-
+    public void addItem(TimeTable tm){
+        timeTables.add(tm);
+        notifyDataSetChanged();
+    }
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final Context context;
 

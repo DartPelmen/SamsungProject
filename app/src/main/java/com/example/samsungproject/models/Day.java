@@ -8,6 +8,8 @@ import androidx.room.PrimaryKey;
 
 import org.joda.time.LocalDate;
 
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.UUID;
 
 
@@ -53,7 +55,8 @@ public class Day{
     }
 
     public String getDayT(){
-        return new LocalDate().withDayOfWeek(num).dayOfWeek().getAsText();
+
+        return new LocalDate().withDayOfWeek(num+1).dayOfWeek().getAsText();
     }
 
 }
