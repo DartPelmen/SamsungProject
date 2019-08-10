@@ -1,10 +1,8 @@
 package com.example.samsungproject;
 
 import android.app.AlertDialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.icu.util.Calendar;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -23,7 +21,6 @@ import androidx.room.Room;
 import com.example.samsungproject.adapter.LessonAdapter;
 import com.example.samsungproject.database.AppDatabase;
 import com.example.samsungproject.models.Lesson;
-import com.example.samsungproject.models.Week;
 
 import java.util.List;
 
@@ -33,6 +30,7 @@ public class LessonActivity extends AppCompatActivity {
     LessonAdapter adapter;
     Button new_note;
     EditText title, description;
+    TimePicker timePicker;
     final Context context = this;
 
     @Override
@@ -40,7 +38,7 @@ public class LessonActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lesson);
         new DataAsynkTask().execute();
-        new_note=findViewById(R.id.new_week);
+        new_note=findViewById(R.id.new_note);
         new_note.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -50,7 +48,7 @@ public class LessonActivity extends AppCompatActivity {
                 mDialogBuilder.setView(add_lesson_view);
                 title=add_lesson_view.findViewById(R.id.title);
                 description=add_lesson_view.findViewById(R.id.description);
-
+                timePicker=add_lesson_view.findViewById(R.id.timePicker);
 
                 mDialogBuilder.setCancelable(true).setPositiveButton("Создать", null);
                 mDialogBuilder.setNegativeButton("Отмена",null);
@@ -65,11 +63,11 @@ public class LessonActivity extends AppCompatActivity {
                             public void onClick(View view) {
                                 String text=title.getText().toString().trim();
                                 String desc=description.getText().toString().trim();
-
+                                String time=timePicker.getCurrentHour()+":"+timePicker.getCurrentMinute();
                                 if (TextUtils.isEmpty(text)){
                                     title.setError("Пожалуйста, введите заголовок!");
                                 }else {
-                                    new LessonActivity().InsertAsynkTask().execute(,title.getText().toString(), desc, getIntent().getExtras().get("id").toString());
+                                    new LessonActivity.InsertAsynkTask().execute(time,title.getText().toString(), desc, getIntent().getExtras().get("id").toString());
                                     alertDialog.dismiss();
                                 }
                             }
@@ -107,20 +105,20 @@ public class LessonActivity extends AppCompatActivity {
         }
     }
 
-    class InsertAsynkTask extends AsyncTask<String, Void, Week> {
+    class InsertAsynkTask extends AsyncTask<String, Void, Lesson> {
         @Override
-        protected Week doInBackground(String... strings) {
+        protected Lesson doInBackground(String... strings) {
             AppDatabase db =  Room.databaseBuilder(getApplicationContext(),
                     AppDatabase.class, "database").build();
             Log.i("INSERT TITLE AND ID", strings[0]+" "+strings[1]);
-            Lesson lesson=new Lesson()
-            db.weekDao().insert(lesson);
+            Lesson lesson=new Lesson(strings[0],strings[1],strings[2],strings[3]);
+            db.lessonDao().insert(lesson);
             return lesson;
         }
 
         @Override
-        protected void onPostExecute(Week week) {
-            super.onPostExecute(week);
+        protected void onPostExecute(Lesson lesson) {
+            super.onPostExecute(lesson);
             ((LessonAdapter)lessonView.getAdapter()).addItem(lesson);
         }
 

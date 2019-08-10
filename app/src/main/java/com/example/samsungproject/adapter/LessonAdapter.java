@@ -32,15 +32,15 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.week_list_layout, parent, false);
+        View view = inflater.inflate(R.layout.lesson_list_layout, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Lesson lesson=lessons.get(position);
-        String s=lessons.get(position).getId()+" "+lessons.get(position).getTitle()+" "+lessons.get(position).getNumber()+" "+lessons.get(position).getDescription();
-        Log.i("INFO ABOUT LESSON",s);
+       // String s=lessons.get(position).getId()+" "+lessons.get(position).getTitle()+" "+lessons.get(position).getNumber()+" "+lessons.get(position).getDescription();
+       // Log.i("INFO ABOUT LESSON",lesson.getNumber());
         holder.title.setText(String.valueOf(lesson.getTitle()));
         holder.time.setText(String.valueOf(lesson.getNumber()));
     }
@@ -50,7 +50,10 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
         return lessons.size();
     }
 
-
+    public void addItem(Lesson lesson){
+        lessons.add(lesson);
+        notifyDataSetChanged();
+    }
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final Context context;
 
