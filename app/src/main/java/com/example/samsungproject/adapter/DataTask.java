@@ -1,6 +1,7 @@
 package com.example.samsungproject.adapter;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.example.samsungproject.database.AppDatabase;
 import com.example.samsungproject.models.Day;

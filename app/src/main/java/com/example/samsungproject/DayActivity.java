@@ -3,6 +3,7 @@ package com.example.samsungproject;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.samsungproject.adapter.DataTask;
 import com.example.samsungproject.adapter.DayAdapter;
 import com.example.samsungproject.adapter.Divider;
 import com.example.samsungproject.models.Day;
@@ -84,5 +86,12 @@ public class DayActivity extends AppCompatActivity implements DialogInterface.On
                 alertDialog.dismiss();
             }
         });
+    }
+    @Override
+    public void onBackPressed() {
+        Intent i=new Intent(DayActivity.this, MainActivity.class);
+        String timetableid=DataTask.getWeek(Objects.requireNonNull(Objects.requireNonNull(getIntent().getExtras()).get("id")).toString()).getTimetableId();
+        i.putExtra("id",timetableid);
+        startActivity(i);
     }
 }
