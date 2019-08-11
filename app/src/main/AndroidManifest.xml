@@ -3,6 +3,7 @@
     package="com.example.samsungproject">
 
     <application
+        android:screenOrientation="portrait"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -10,17 +11,27 @@
         android:supportsRtl="true"
         android:name=".database.MyApplication"
         android:theme="@style/AppTheme"        >
-        <activity android:name=".LessonActivity"></activity>
-        <activity android:name=".TimeTableActivity">
+        <activity android:name=".LessonActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".TimeTableActivity"
+            android:screenOrientation="portrait">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LessonInfoActivity" />
-        <activity android:name=".DayActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".LessonInfoActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".DayActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            />
     </application>
 
 </manifest>
