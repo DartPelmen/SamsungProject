@@ -24,5 +24,7 @@ public interface TimeTableDao {
     void update(TimeTable timeTable);
     @Delete
     void delete(TimeTable timeTable);
+    @Query("DELETE FROM TimeTable WHERE idTimeTable = :id")
+    void delete(String id);
 
 }

@@ -26,7 +26,6 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
     public LessonAdapter(Context context, List<Lesson> lessons) {
         this.inflater = LayoutInflater.from(context);
         this.lessons = lessons;
-        Log.i("SIZEOF ADAPTER LESSONS", String.valueOf(lessons.size()));
     }
 
     @NonNull
@@ -39,10 +38,8 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Lesson lesson=lessons.get(position);
-       // String s=lessons.get(position).getId()+" "+lessons.get(position).getTitle()+" "+lessons.get(position).getNumber()+" "+lessons.get(position).getDescription();
-       // Log.i("INFO ABOUT LESSON",lesson.getNumber());
         holder.title.setText(String.valueOf(lesson.getTitle()));
-        holder.time.setText(String.valueOf(lesson.getNumber()));
+        holder.time.setText(lesson.getHour()+":"+lesson.getMinute());
     }
 
     @Override
@@ -69,12 +66,13 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder
         public void onClick(View view) {
             int pos=getAdapterPosition();
             String s=lessons.get(pos).getId();
-            Log.i("ID ",s);
             Intent i=new Intent(view.getContext(), LessonInfoActivity.class);
             i.putExtra("id",s);
-            i.putExtra("number",lessons.get(pos).getNumber());
+            i.putExtra("hour",lessons.get(pos).getHour());
+            i.putExtra("minute",lessons.get(pos).getMinute());
             i.putExtra("title",lessons.get(pos).getTitle());
             i.putExtra("description",lessons.get(pos).getDescription());
+            i.putExtra("dayid",lessons.get(pos).getDayId());
             context.startActivity(i);
         }
     }

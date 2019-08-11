@@ -4,9 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.UUID;
+
 
 @Entity(tableName = "Lesson",foreignKeys = @ForeignKey(entity = Day.class,parentColumns = "idDay",childColumns = "DayId",onDelete = ForeignKey.CASCADE,onUpdate = ForeignKey.CASCADE))
 public class Lesson{
@@ -15,8 +17,11 @@ public class Lesson{
     @ColumnInfo(name="idLesson")
     private String id;
     @NonNull
-    @ColumnInfo(name="number")
-    private String number;
+    @ColumnInfo(name="hour")
+    private Integer hour;
+    @NonNull
+    @ColumnInfo(name="minute")
+    private Integer minute;
     @NonNull
     @ColumnInfo(name="title")
     private String title;
@@ -25,9 +30,19 @@ public class Lesson{
     @ColumnInfo(name="DayId")
     private String dayId;
 
-    public Lesson( String number, @NonNull String title, String description, String dayId) {
-        this.id =UUID.randomUUID().toString().replace("-","").toUpperCase();
-        this.number = number;
+    public Lesson(@NonNull Integer hour, @NonNull Integer minute, @NonNull String title, String description, String dayId) {
+        this.id = UUID.randomUUID().toString().replace("-","").toUpperCase();
+        this.hour = hour;
+        this.minute = minute;
+        this.title = title;
+        this.description = description;
+        this.dayId = dayId;
+    }
+    @Ignore
+    public Lesson(@NonNull String id, @NonNull Integer hour, @NonNull Integer minute, @NonNull String title, String description, String dayId) {
+        this.id = id;
+        this.hour = hour;
+        this.minute = minute;
         this.title = title;
         this.description = description;
         this.dayId = dayId;
@@ -42,12 +57,23 @@ public class Lesson{
         this.id = id;
     }
 
-    public String getNumber() {
-        return number;
+
+    @NonNull
+    public Integer getHour() {
+        return hour;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setHour(@NonNull Integer hour) {
+        this.hour = hour;
+    }
+
+    @NonNull
+    public Integer getMinute() {
+        return minute;
+    }
+
+    public void setMinute(@NonNull Integer minute) {
+        this.minute = minute;
     }
 
     public String getTitle() {

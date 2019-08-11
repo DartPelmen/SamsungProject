@@ -65,7 +65,6 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
         public void onClick(View view) {
             int pos=getAdapterPosition();
             String s=days.get(pos).getId();
-            Log.i("ID ",s);
             Intent i=new Intent(view.getContext(), LessonActivity.class);
             i.putExtra("id",s);
             context.startActivity(i);

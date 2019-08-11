@@ -95,7 +95,6 @@ public class DayActivity extends AppCompatActivity {
         protected Day doInBackground(String... strings) {
             AppDatabase db =  Room.databaseBuilder(getApplicationContext(),
                     AppDatabase.class, "database").build();
-            Log.i("INSERT TITLE AND ID", strings[0]+" "+strings[1]);
             Day day=new Day(Integer.parseInt(strings[0]),strings[1]);
             db.dayDao().insert(day);
             return day;

@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -48,8 +47,8 @@ public class LessonActivity extends AppCompatActivity {
                 mDialogBuilder.setView(add_lesson_view);
                 title=add_lesson_view.findViewById(R.id.title);
                 description=add_lesson_view.findViewById(R.id.description);
-                timePicker=add_lesson_view.findViewById(R.id.timePicker);
-
+                timePicker=add_lesson_view.findViewById(R.id.timefield);
+                timePicker.setIs24HourView(true);
                 mDialogBuilder.setCancelable(true).setPositiveButton("Создать", null);
                 mDialogBuilder.setNegativeButton("Отмена",null);
 
@@ -63,11 +62,16 @@ public class LessonActivity extends AppCompatActivity {
                             public void onClick(View view) {
                                 String text=title.getText().toString().trim();
                                 String desc=description.getText().toString().trim();
-                                String time=timePicker.getCurrentHour()+":"+timePicker.getCurrentMinute();
                                 if (TextUtils.isEmpty(text)){
                                     title.setError("Пожалуйста, введите заголовок!");
                                 }else {
-                                    new LessonActivity.InsertAsynkTask().execute(time,title.getText().toString(), desc, getIntent().getExtras().get("id").toString());
+                                    new LessonActivity.InsertAsynkTask().execute(
+                                            timePicker.getCurrentHour().toString(),
+                                            timePicker.getCurrentMinute().toString(),
+                                            title.getText().toString(),
+                                            desc,
+                                            getIntent().getExtras().get("id").toString()
+                                    );
                                     alertDialog.dismiss();
                                 }
                             }
@@ -110,8 +114,7 @@ public class LessonActivity extends AppCompatActivity {
         protected Lesson doInBackground(String... strings) {
             AppDatabase db =  Room.databaseBuilder(getApplicationContext(),
                     AppDatabase.class, "database").build();
-            Log.i("INSERT TITLE AND ID", strings[0]+" "+strings[1]);
-            Lesson lesson=new Lesson(strings[0],strings[1],strings[2],strings[3]);
+            Lesson lesson=new Lesson(Integer.parseInt(strings[0]),Integer.parseInt(strings[1]),strings[2],strings[3],strings[4]);
             db.lessonDao().insert(lesson);
             return lesson;
         }

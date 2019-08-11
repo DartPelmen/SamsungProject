@@ -105,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
         protected Week doInBackground(String... strings) {
             AppDatabase db =  Room.databaseBuilder(getApplicationContext(),
                     AppDatabase.class, "database").build();
-            Log.i("INSERT TITLE AND ID", strings[0]+" "+strings[1]);
             Week week=new Week(strings[0],strings[1]);
             db.weekDao().insert(week);
             return week;

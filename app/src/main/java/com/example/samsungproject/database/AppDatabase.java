@@ -12,7 +12,7 @@ import com.example.samsungproject.models.Lesson;
 import com.example.samsungproject.models.TimeTable;
 import com.example.samsungproject.models.Week;
 
-@Database(entities = {TimeTable.class, Week.class, Day.class, Lesson.class}, version = 2)
+@Database(entities = {TimeTable.class, Week.class, Day.class, Lesson.class}, version = 3)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract TimeTableDao timeTableDao();
     public abstract WeekDao weekDao();
