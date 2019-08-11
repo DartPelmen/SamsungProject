@@ -8,6 +8,7 @@
     tools:context=".LessonInfoActivity">
 
     <EditText
+        android:layout_margin="4dp"
         android:id="@+id/lessonTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,19 +16,25 @@
         android:text="Заголовок" />
 
     <LinearLayout
+        android:layout_margin="4dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="2"
         android:orientation="vertical">
 
         <TextView
+            android:layout_margin="4dp"
             android:id="@+id/timeLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Время" />
+            android:text="Время"
+            android:textColor="#4F4F4F" />
         <TimePicker
+            android:layout_gravity="center"
+            android:layout_margin="4dp"
             android:id="@+id/timefield"
+            android:textColor="#4F4F4F"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:timePickerMode="spinner" />
@@ -35,6 +42,7 @@
     </LinearLayout>
 
     <EditText
+        android:layout_margin="4dp"
         android:id="@+id/description"
         android:layout_width="400dp"
         android:layout_height="155dp"
@@ -42,13 +50,17 @@
         android:ems="10"
         android:gravity="start|top"
         android:inputType="textMultiLine"
+        android:textColor="#4F4F4F"
         tools:text="Описание" />
 
     <Button
         android:id="@+id/edit"
+        android:layout_margin="4dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Сохранить изменения"
+        android:background="@drawable/rectangle_2"
+        android:textColor="#F2F2F2"
         android:onClick="editClicked"
         />
 
@@ -56,6 +68,9 @@
         android:id="@+id/deleteButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:background="@drawable/rectangle_5"
         android:onClick="deleteClicked"
-        android:text="DELETE" />
+        android:textColor="#F2F2F2"
+        android:text="удалить заметку" />
 </LinearLayout>

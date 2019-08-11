@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.samsungproject.adapter.DayAdapter;
+import com.example.samsungproject.adapter.Divider;
 import com.example.samsungproject.models.Day;
 
 import java.util.Objects;
@@ -46,6 +47,7 @@ public class DayActivity extends AppCompatActivity implements DialogInterface.On
         setContentView(R.layout.activity_day);
         LinearLayoutManager llm = new LinearLayoutManager(DayActivity.this);
         dayView=findViewById(R.id.dayView);
+        dayView.addItemDecoration(new Divider(this));
         dayView.setLayoutManager(llm);
         adapter=new DayAdapter(DayActivity.this, Objects.requireNonNull(Objects.requireNonNull(getIntent().getExtras()).get("id")).toString());
         dayView.setAdapter(adapter);

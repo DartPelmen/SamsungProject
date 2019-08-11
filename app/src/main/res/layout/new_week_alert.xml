@@ -5,17 +5,21 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:padding="10dp" >
+    android:padding="10dp"
+    android:background="#F3F4FF"
+    >
 
     <TextView
         android:id="@+id/tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Название недели"
+        android:textColor="#4F4F4F"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
         android:id="@+id/title"
+        android:background="@drawable/rectangle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
         <requestFocus />

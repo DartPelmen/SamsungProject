@@ -2,17 +2,20 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:tag="ww">
+    android:background="#F3F4FF"
+    >
 
     <TextView
         android:id="@+id/tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Заголовок"
+        android:textColor="#4F4F4F"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
         android:id="@+id/title"
+        android:background="@drawable/rectangle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -24,12 +27,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Описание"
+        android:textColor="#4F4F4F"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
         android:id="@+id/description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/rectangle_1"
         android:ems="10"
         android:gravity="start|top"
         android:inputType="textMultiLine" />

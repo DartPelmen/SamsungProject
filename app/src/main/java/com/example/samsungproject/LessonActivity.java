@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.samsungproject.adapter.DataTask;
+import com.example.samsungproject.adapter.Divider;
 import com.example.samsungproject.adapter.LessonAdapter;
 import com.example.samsungproject.models.Lesson;
 
@@ -46,6 +47,7 @@ public class LessonActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lesson);
         lessonView=findViewById(R.id.lesson_view);
+        lessonView.addItemDecoration(new Divider(this));
         LinearLayoutManager llm = new LinearLayoutManager(LessonActivity.this);
         lessonView.setLayoutManager(llm);
         adapter=new LessonAdapter(LessonActivity.this, Objects.requireNonNull(Objects.requireNonNull(getIntent().getExtras()).get("id")).toString());

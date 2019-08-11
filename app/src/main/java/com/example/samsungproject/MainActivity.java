@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.samsungproject.adapter.Divider;
 import com.example.samsungproject.adapter.WeekAdapter;
 import com.example.samsungproject.models.Week;
 
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements DialogInterface.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         weekView=findViewById(R.id.weekView);
+        weekView.addItemDecoration(new Divider(this));
         LinearLayoutManager llm = new LinearLayoutManager(this);
         weekView.setLayoutManager(llm);
         adapter=new WeekAdapter(MainActivity.this, Objects.requireNonNull(Objects.requireNonNull(getIntent().getExtras()).get("id")).toString());

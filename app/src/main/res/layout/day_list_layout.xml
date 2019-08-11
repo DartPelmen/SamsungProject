@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#F3F4FF"
     android:orientation="horizontal">
 
     <TextView
@@ -9,22 +10,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textAlignment="center" />
 
     <Button
         android:id="@+id/edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="1dp"
         android:layout_weight="0.1"
-        android:text="Edit"
+        android:background="@drawable/ic_editsvg"
         android:visibility="invisible" />
-
     <Button
         android:id="@+id/delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="1dp"
         android:layout_weight="0.1"
-        android:text="Delete"
+        android:background="@drawable/ic_delete_2"
         android:visibility="invisible" />
-
 </LinearLayout>

@@ -10,11 +10,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.samsungproject.adapter.Divider;
 import com.example.samsungproject.adapter.TimeTableAdapter;
 import com.example.samsungproject.models.TimeTable;
 
@@ -36,18 +38,18 @@ public class TimeTableActivity extends AppCompatActivity implements DialogInterf
     TimeTableAdapter adapter;
     Button new_timetable;
     EditText title;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_table);
         timetableView=findViewById(R.id.timetablesView);
-        timetableView=findViewById(R.id.timetablesView);
+        timetableView.addItemDecoration(new Divider(this));
         LinearLayoutManager llm = new LinearLayoutManager(this);
         timetableView.setLayoutManager(llm);
         adapter=new TimeTableAdapter(this);
         timetableView.setAdapter(adapter);
         new_timetable=findViewById(R.id.new_timetable);
+
     }
 
     public void newTimTableClicked(View view) {
