@@ -18,7 +18,6 @@ import java.util.UUID;
  * */
 @Dao
 public interface TimeTableDao {
-
     @Query("SELECT * FROM TimeTable")
     List<TimeTable> getAll();
     @Query("SELECT * FROM TimeTable WHERE id = :id")
@@ -32,5 +31,4 @@ public interface TimeTableDao {
     void delete(TimeTable timeTable);
     @Query("DELETE FROM TimeTable WHERE id = :id")
     void delete(String id);
-
 }
