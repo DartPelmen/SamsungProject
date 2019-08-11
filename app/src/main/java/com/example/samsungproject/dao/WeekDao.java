@@ -26,5 +26,7 @@ public interface WeekDao {
     void update(Week week);
     @Delete
     void delete(Week week);
+    @Query("DELETE FROM Week WHERE idWeek= :idWeek")
+    void delete(String idWeek);
 
 }

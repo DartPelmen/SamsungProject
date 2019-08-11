@@ -3,6 +3,7 @@ package com.example.samsungproject.models;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.UUID;
@@ -18,6 +19,11 @@ public class TimeTable{
     @ColumnInfo(name = "Title")
     private String title;
 
+    public TimeTable(@NonNull String id, @NonNull String title) {
+        this.id = id;
+        this.title = title;
+    }
+    @Ignore
     public TimeTable(@NonNull String title) {
         this.title = title;
         this.id=UUID.randomUUID().toString().replace("-","").toUpperCase();;

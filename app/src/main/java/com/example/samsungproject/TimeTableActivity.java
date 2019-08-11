@@ -89,10 +89,7 @@ public class TimeTableActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            AppDatabase db =  Room.databaseBuilder(getApplicationContext(),
-                    AppDatabase.class, "database").build();
-
-            d=db.timeTableDao().getAll();
+            d=AppDatabase.getInstance().timeTableDao().getAll();
             return null;
         }
     }

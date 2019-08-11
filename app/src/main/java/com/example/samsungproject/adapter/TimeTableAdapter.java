@@ -1,9 +1,12 @@
 package com.example.samsungproject.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.view.DragEvent;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +23,6 @@ import com.example.samsungproject.database.AppDatabase;
 import com.example.samsungproject.models.TimeTable;
 
 import java.util.List;
-
-import javax.inject.Inject;
 
 public class TimeTableAdapter extends RecyclerView.Adapter<TimeTableAdapter.ViewHolder> {
 
@@ -65,13 +66,50 @@ public class TimeTableAdapter extends RecyclerView.Adapter<TimeTableAdapter.View
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private final Context context;
         Button edit, delete;
-        TextView title;
+        TextView title, alert_title;
 
         ViewHolder(View view) {
             super(view);
             title = view.findViewById(R.id.title);
-            edit = view.findViewById(R.id.edit_t);
-            delete=view.findViewById(R.id.delete_t);
+            edit = view.findViewById(R.id.edit);
+            edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    LayoutInflater li = LayoutInflater.from(context);
+                    View add_timetable_view = li.inflate(R.layout.new_timetable_alert, null);
+                    final AlertDialog.Builder mDialogBuilder = new AlertDialog.Builder(context);
+                    mDialogBuilder.setView(add_timetable_view);
+                    alert_title=add_timetable_view.findViewById(R.id.title);
+                    mDialogBuilder.setCancelable(true).setPositiveButton("Сохранить", null);
+                    mDialogBuilder.setNegativeButton("Отмена",null);
+
+                    final AlertDialog alertDialog = mDialogBuilder.create();
+                    alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialogInterface) {
+                            Button button = (alertDialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                            button.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    String text=alert_title.getText().toString().trim();
+                                    if (TextUtils.isEmpty(text)){
+                                        title.setError("Заголовок расписания не должен быть пустым!");
+                                    }else {
+                                        timeTables.get(getAdapterPosition()).setTitle(text);
+                                        Log.i("TITLE DSADSADASDSADAD",timeTables.get(getAdapterPosition()).getTitle());
+                                        timeTables.get(getAdapterPosition()).setTitle(text);
+                                        new UpdateAsynkTask().execute(timeTables.get(getAdapterPosition()));
+                                        alertDialog.dismiss();
+                                    }
+                                }
+                            });
+                        }
+
+                    });
+                    alertDialog.show();
+                }
+            });
+            delete=view.findViewById(R.id.delete);
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -121,6 +159,25 @@ public class TimeTableAdapter extends RecyclerView.Adapter<TimeTableAdapter.View
                 super.onPostExecute(aString);
 
                 deleteFrom(Integer.parseInt(aString));
+            }
+
+
+        }
+        class UpdateAsynkTask extends AsyncTask<TimeTable, Void, TimeTable> {
+            @Override
+            protected TimeTable doInBackground(TimeTable... timeTables) {
+                AppDatabase db =  Room.databaseBuilder(context,
+                        AppDatabase.class, "database").build();
+                Log.i("ID+TITLE",timeTables[0].getId()+" "+timeTables[0].getTitle());
+                db.timeTableDao().update(timeTables[0]);
+                return timeTables[0];
+            }
+
+            @Override
+            protected void onPostExecute(TimeTable t) {
+                super.onPostExecute(t);
+                notifyItemChanged(getAdapterPosition());
+               // setAt(getAdapterPosition(),t);
             }
 
 

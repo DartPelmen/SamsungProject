@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -84,7 +83,7 @@ public class DayActivity extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             AppDatabase db =  Room.databaseBuilder(getApplicationContext(),
                     AppDatabase.class, "database").build();
-            d=db.dayDao().getAll();
+            d=db.dayDao().getAllByWeekId(getIntent().getExtras().getString("id"));
 
             return null;
         }

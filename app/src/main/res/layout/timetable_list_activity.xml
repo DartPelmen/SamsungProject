@@ -17,7 +17,7 @@
             android:text="TextView" />
 
         <Button
-            android:id="@+id/edit_t"
+            android:id="@+id/edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
@@ -25,7 +25,7 @@
             android:text="Edit" />
 
         <Button
-            android:id="@+id/delete_t"
+            android:id="@+id/delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"

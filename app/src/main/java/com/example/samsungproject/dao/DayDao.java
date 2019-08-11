@@ -26,5 +26,6 @@ public interface DayDao {
     void update(Day day);
     @Delete
     void delete(Day day);
-
+    @Query("DELETE FROM Day WHERE idDay = :idDay")
+    void delete(String idDay);
 }

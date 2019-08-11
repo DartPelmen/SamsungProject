@@ -66,6 +66,12 @@ public class LessonInfoActivity extends AppCompatActivity {
             }
         });
     }
+    @Override
+    public void onBackPressed() {
+        Intent i=new Intent(LessonInfoActivity.this,LessonActivity.class);
+        i.putExtra("id",getIntent().getExtras().get("dayid").toString());
+        startActivity(i);
+    }
 
     class DataAsynkTask extends AsyncTask<Void, Void, Void> {
         @Override
