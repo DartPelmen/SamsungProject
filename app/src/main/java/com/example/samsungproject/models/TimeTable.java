@@ -4,17 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
-import androidx.room.PrimaryKey;
 
 import java.util.UUID;
-
+/*
+ * Модели для таблиц БД.
+ * Созданы на базе аннотаций в рамках библиотеки Room.
+ * Принцип работы аналогичен другим ORM.
+ * */
 @Entity(tableName = "TimeTable")
-public class TimeTable{
+public class TimeTable extends Model{
 
-    @NonNull
-    @PrimaryKey
-    @ColumnInfo(name = "idTimeTable")
-    private String id;
+
     @NonNull
     @ColumnInfo(name = "Title")
     private String title;
@@ -27,14 +27,6 @@ public class TimeTable{
     public TimeTable(@NonNull String title) {
         this.title = title;
         this.id=UUID.randomUUID().toString().replace("-","").toUpperCase();;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getTitle() {

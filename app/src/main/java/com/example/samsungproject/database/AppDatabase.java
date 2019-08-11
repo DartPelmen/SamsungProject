@@ -15,7 +15,12 @@ import com.example.samsungproject.models.Lesson;
 import com.example.samsungproject.models.TimeTable;
 import com.example.samsungproject.models.Week;
 
-@Database(entities = {TimeTable.class, Week.class, Day.class, Lesson.class}, version = 3)
+/*
+* Класс singleton для работы с базой данных.
+* Можно обойтись и без singleton, создавая объекты AppDatabase прямо в активностях, в то время как singleton дает возможность
+* создать один объект AppDatabase, через который будет организована работа с БД во всем приложении.
+* */
+@Database(entities = {TimeTable.class, Week.class, Day.class, Lesson.class}, version = 5)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract TimeTableDao timeTableDao();
     public abstract WeekDao weekDao();

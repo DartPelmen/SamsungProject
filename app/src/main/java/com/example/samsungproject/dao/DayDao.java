@@ -7,16 +7,20 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.example.samsungproject.models.Day;
-import com.example.samsungproject.models.TimeTable;
 
 import java.util.List;
-import java.util.UUID;
+
+/*
+ * Интерфейс для операций с таблицей БД.
+ * Реалзиован с помощью аннотаций в рамках библиотеки Room.
+ * Прицип работы аналогичен Hibernate или другим ORM
+ * */
 @Dao
 public interface DayDao {
 
     @Query("SELECT * FROM Day")
     List<Day> getAll();
-    @Query("SELECT * FROM Day WHERE idDay = :id")
+    @Query("SELECT * FROM Day WHERE id = :id")
     Day getById(String id);
     @Query("SELECT * FROM Day WHERE WeekId = :weekId")
     List<Day>getAllByWeekId(String weekId);
@@ -26,6 +30,6 @@ public interface DayDao {
     void update(Day day);
     @Delete
     void delete(Day day);
-    @Query("DELETE FROM Day WHERE idDay = :idDay")
+    @Query("DELETE FROM Day WHERE id = :idDay")
     void delete(String idDay);
 }

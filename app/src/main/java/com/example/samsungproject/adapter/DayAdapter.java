@@ -4,27 +4,27 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
 import com.example.samsungproject.LessonActivity;
 import com.example.samsungproject.R;
-import com.example.samsungproject.database.AppDatabase;
 import com.example.samsungproject.models.Day;
 
 import java.util.List;
 
+/*
+* Адаптер для работы recycleview дней.
+* Здесь реализовано изменение списка в клиенте, передача команд на изменение данных в БД, а также клики по элементу.
+* */
 public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
 
 
@@ -32,9 +32,9 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
 
     private List<Day> days;
 
-    public DayAdapter(Context context, List<Day> days) {
+    public DayAdapter(Context context, String weekId) {
         this.inflater = LayoutInflater.from(context);
-        this.days = days;
+        this.days = DataTask.getDays(weekId);
     }
 
     @NonNull
@@ -56,12 +56,18 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
     }
 
     public void addItem(Day day){
+        DataTask.insertDay(day);
         days.add(day);
         notifyDataSetChanged();
     }
-    public void deleteFrom(int pos) {
+    private void deleteFrom(int pos) {
+        DataTask.deleteDay(days.get(pos).getId());
         days.remove(pos);
         notifyDataSetChanged();
+    }
+    private void updateFrom(int pos) {
+        DataTask.updateDay(days.get(pos));
+        notifyItemChanged(pos);
     }
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private final Context context;
@@ -77,7 +83,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
                 @Override
                 public void onClick(View view) {
                     LayoutInflater li = LayoutInflater.from(context);
-                    View add_timetable_view = li.inflate(R.layout.new_day_alert, null);
+                    View add_timetable_view = li.inflate(R.layout.new_day_alert, new LinearLayout(context),false);
                     final AlertDialog.Builder mDialogBuilder = new AlertDialog.Builder(context);
                     mDialogBuilder.setView(add_timetable_view);
                     alert_title=add_timetable_view.findViewById(R.id.spinner);
@@ -91,9 +97,9 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
                             button.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                        Integer num=alert_title.getSelectedItemPosition();
+                                        int num=alert_title.getSelectedItemPosition();
                                         days.get(getAdapterPosition()).setNum(num);
-                                        new UpdateAsynkTask().execute(days.get(getAdapterPosition()));
+                                        updateFrom(getAdapterPosition());
                                         alertDialog.dismiss();
 
                                 }
@@ -111,7 +117,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    new DeleteAsynkTask().execute(days.get(getAdapterPosition()).getId());
+                    deleteFrom(getAdapterPosition());
                 }
             });
             view.setOnLongClickListener(this);
@@ -121,9 +127,9 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
         @Override
         public void onClick(View view) {
             int pos=getAdapterPosition();
-            String s=days.get(pos).getId();
             Intent i=new Intent(view.getContext(), LessonActivity.class);
-            i.putExtra("id",s);
+            i.putExtra("id",days.get(pos).getId());
+            i.putExtra("weekid",days.get(pos).getWeekId());
             context.startActivity(i);
         }
         @Override
@@ -139,41 +145,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
             }
             return true;
         }
-        class DeleteAsynkTask extends AsyncTask<String, Void, Void> {
-            @Override
-            protected Void doInBackground(String... strings) {
-                AppDatabase db =  Room.databaseBuilder(context,
-                        AppDatabase.class, "database").build();
 
-                db.dayDao().delete(strings[0]);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                deleteFrom(getAdapterPosition());
-            }
-        }
-
-        class UpdateAsynkTask extends AsyncTask<Day, Void, Day> {
-            @Override
-            protected Day doInBackground(Day... days) {
-                AppDatabase db =  Room.databaseBuilder(context,
-                        AppDatabase.class, "database").build();
-                db.dayDao().update(days[0]);
-                return days[0];
-            }
-
-            @Override
-            protected void onPostExecute(Day d) {
-                super.onPostExecute(d);
-                notifyItemChanged(getAdapterPosition());
-                // setAt(getAdapterPosition(),t);
-            }
-
-
-        }
     }
 
 

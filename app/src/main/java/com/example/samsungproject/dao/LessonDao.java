@@ -9,12 +9,18 @@ import androidx.room.Update;
 import com.example.samsungproject.models.Lesson;
 
 import java.util.List;
+
+/*
+ * Интерфейс для операций с таблицей БД.
+ * Реалзиован с помощью аннотаций в рамках библиотеки Room.
+ * Прицип работы аналогичен Hibernate или другим ORM
+ * */
 @Dao
 public interface LessonDao {
 
     @Query("SELECT * FROM Lesson")
     List<Lesson> getAll();
-    @Query("SELECT * FROM Lesson WHERE idLesson = :id")
+    @Query("SELECT * FROM Lesson WHERE id = :id")
     Lesson getById(String id);
     @Query("SELECT * FROM Lesson WHERE dayId = :dayId")
     List<Lesson>getAllByDayId(String dayId);
@@ -24,6 +30,6 @@ public interface LessonDao {
     void update(Lesson lesson);
     @Delete
     void delete(Lesson lesson);
-    @Query("DELETE FROM LESSON WHERE idLesson = :idLesson")
+    @Query("DELETE FROM LESSON WHERE id = :idLesson")
     void delete(String idLesson);
 }

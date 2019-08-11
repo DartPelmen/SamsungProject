@@ -3,108 +3,84 @@ package com.example.samsungproject;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
 import com.example.samsungproject.adapter.DayAdapter;
-import com.example.samsungproject.database.AppDatabase;
 import com.example.samsungproject.models.Day;
 
-import java.util.List;
+import java.util.Objects;
 
-public class DayActivity extends AppCompatActivity {
+/*
+ * Активность дней недели.
+ * Показывает доступные дни.
+ * Дни отображены в RecycleView.
+ * Реализованы: создание и редактирование дней через диалоговое окно (AlertDialog), удаление дня. *
+ *
+ * Переход дальше происходит по клику на элемент.
+ * При longclick показывает кнопки для удаления и редактирования.
+ *
+ * При создании активности (кроме timetable делается выборка данных по id.
+ *
+ * Для перехода назад в слушателе (OnBackPressed) реализовано получение id сущности-родителя (lesson->day->week->timetable)
+ *и переход на активность с передачей этого id.
+ * */
+public class DayActivity extends AppCompatActivity implements DialogInterface.OnShowListener {
     final Context context = this;
     DayAdapter adapter;
     RecyclerView dayView;
     Button new_day;
     Spinner spinner;
+    AlertDialog alertDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_day);
-        new DataAsynkTask().execute();
+        LinearLayoutManager llm = new LinearLayoutManager(DayActivity.this);
+        dayView=findViewById(R.id.dayView);
+        dayView.setLayoutManager(llm);
+        adapter=new DayAdapter(DayActivity.this, Objects.requireNonNull(Objects.requireNonNull(getIntent().getExtras()).get("id")).toString());
+        dayView.setAdapter(adapter);
         new_day=findViewById(R.id.new_day);
-        new_day.setOnClickListener(new View.OnClickListener() {
+    }
+
+
+    public void newDayClicked(View view) {
+        showAlert();
+    }
+
+    private void showAlert() {
+        LayoutInflater li = LayoutInflater.from(context);
+        View add_timetable_view = li.inflate(R.layout.new_day_alert, new LinearLayout(this),false);
+        AlertDialog.Builder mDialogBuilder = new AlertDialog.Builder(context);
+        mDialogBuilder.setView(add_timetable_view);
+        spinner=add_timetable_view.findViewById(R.id.spinner);
+        mDialogBuilder.setCancelable(true).setPositiveButton("Создать", null);
+        mDialogBuilder.setNegativeButton("Отмена",null);
+
+        alertDialog = mDialogBuilder.create();
+        alertDialog.setOnShowListener(this);
+        alertDialog.show();
+    }
+
+    @Override
+    public void onShow(DialogInterface dialogInterface) {
+        Button button = (alertDialog).getButton(AlertDialog.BUTTON_POSITIVE);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LayoutInflater li = LayoutInflater.from(context);
-                View add_timetable_view = li.inflate(R.layout.new_day_alert, null);
-                final AlertDialog.Builder mDialogBuilder = new AlertDialog.Builder(context);
-                mDialogBuilder.setView(add_timetable_view);
-                spinner=add_timetable_view.findViewById(R.id.spinner);
-                mDialogBuilder.setCancelable(true).setPositiveButton("Создать", null);
-                mDialogBuilder.setNegativeButton("Отмена",null);
-
-                final AlertDialog alertDialog = mDialogBuilder.create();
-                alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                    @Override
-                    public void onShow(DialogInterface dialogInterface) {
-                        Button button = (alertDialog).getButton(AlertDialog.BUTTON_POSITIVE);
-                        button.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                String text=spinner.getSelectedItem().toString();
-                                    new DayActivity.InsertAsynkTask().execute(String.valueOf(spinner.getSelectedItemPosition()),getIntent().getExtras().get("id").toString());
-                                    alertDialog.dismiss();
-                            }
-                        });
-                    }
-
-                });
-                alertDialog.show();
+                Day day=new Day(spinner.getSelectedItemPosition(), Objects.requireNonNull(Objects.requireNonNull(getIntent().getExtras()).get("id")).toString());
+                ((DayAdapter) Objects.requireNonNull(dayView.getAdapter())).addItem(day);
+                alertDialog.dismiss();
             }
         });
     }
-
-    class DataAsynkTask extends AsyncTask<Void, Void, Void> {
-
-        List<Day> d;
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            LinearLayoutManager llm = new LinearLayoutManager(DayActivity.this);
-            dayView=findViewById(R.id.dayView);
-            dayView.setLayoutManager(llm);
-            adapter=new DayAdapter(DayActivity.this,d);
-            dayView.setAdapter(adapter);
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            AppDatabase db =  Room.databaseBuilder(getApplicationContext(),
-                    AppDatabase.class, "database").build();
-            d=db.dayDao().getAllByWeekId(getIntent().getExtras().getString("id"));
-
-            return null;
-        }
-    }
-
-    class InsertAsynkTask extends AsyncTask<String, Void, Day> {
-        @Override
-        protected Day doInBackground(String... strings) {
-            AppDatabase db =  Room.databaseBuilder(getApplicationContext(),
-                    AppDatabase.class, "database").build();
-            Day day=new Day(Integer.parseInt(strings[0]),strings[1]);
-            db.dayDao().insert(day);
-            return day;
-        }
-
-        @Override
-        protected void onPostExecute(Day day) {
-            super.onPostExecute(day);
-            ((DayAdapter)dayView.getAdapter()).addItem(day);
-        }
-
-    }
-
 }

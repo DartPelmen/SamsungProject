@@ -4,34 +4,34 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
 import com.example.samsungproject.DayActivity;
 import com.example.samsungproject.R;
-import com.example.samsungproject.database.AppDatabase;
 import com.example.samsungproject.models.Week;
 
 import java.util.List;
-
+/*
+ * Адаптер для работы recycleview недель.
+ * Здесь реализовано изменение списка в клиенте, передача команд на изменение данных в БД, а также клики по элементу.
+ * */
 public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.ViewHolder> {
     private LayoutInflater inflater;
 
     private List<Week> weeks;
 
-    public WeekAdapter(Context context, List<Week> weeks) {
+    public WeekAdapter(Context context, String timeTableId) {
         this.inflater = LayoutInflater.from(context);
-        this.weeks = weeks;
+        this.weeks = DataTask.getWeeks(timeTableId);
     }
 
     @NonNull
@@ -54,12 +54,18 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.ViewHolder> {
     }
 
     public void addItem(Week week){
+        DataTask.insertWeek(week);
         weeks.add(week);
         notifyDataSetChanged();
     }
-    public void deleteFrom(int pos) {
+    private void deleteFrom(int pos) {
+        DataTask.deleteWeek(weeks.get(pos).getId());
         weeks.remove(pos);
         notifyDataSetChanged();
+    }
+    private void updateFrom(int pos) {
+        DataTask.updateWeek(weeks.get(pos));
+        notifyItemChanged(pos);
     }
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private final Context context;
@@ -73,7 +79,7 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.ViewHolder> {
                 @Override
                 public void onClick(View view) {
                     LayoutInflater li = LayoutInflater.from(context);
-                    View add_timetable_view = li.inflate(R.layout.new_week_alert, null);
+                    View add_timetable_view = li.inflate(R.layout.new_week_alert, new LinearLayout(context),false);
                     final AlertDialog.Builder mDialogBuilder = new AlertDialog.Builder(context);
                     mDialogBuilder.setView(add_timetable_view);
                     alert_title=add_timetable_view.findViewById(R.id.title);
@@ -93,9 +99,8 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.ViewHolder> {
                                         title.setError("Нзавание недели не длолжно быть пустым!");
                                     }else {
                                         weeks.get(getAdapterPosition()).setTitle(text);
-                                        Log.i("TITLE DSADSADASDSADAD",weeks.get(getAdapterPosition()).getTitle());
                                         weeks.get(getAdapterPosition()).setTitle(text);
-                                        new UpdateAsynkTask().execute(weeks.get(getAdapterPosition()));
+                                        updateFrom(getAdapterPosition());
                                         alertDialog.dismiss();
                                     }
                                 }
@@ -110,7 +115,7 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.ViewHolder> {
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    new DeleteAsynkTask().execute(weeks.get(getAdapterPosition()).getId());
+                    deleteFrom(getAdapterPosition());
                 }
             });
             view.setOnClickListener(this);
@@ -139,42 +144,6 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.ViewHolder> {
             }
             return true;
         }
-        class DeleteAsynkTask extends AsyncTask<String, Void, Void> {
-            @Override
-            protected Void doInBackground(String... strings) {
-                AppDatabase db =  Room.databaseBuilder(context,
-                        AppDatabase.class, "database").build();
 
-                db.weekDao().delete(strings[0]);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                deleteFrom(getAdapterPosition());
-            }
-
-
-        }
-        class UpdateAsynkTask extends AsyncTask<Week, Void, Week> {
-            @Override
-            protected Week doInBackground(Week... weeks) {
-                AppDatabase db =  Room.databaseBuilder(context,
-                        AppDatabase.class, "database").build();
-                Log.i("ID+TITLE",weeks[0].getId()+" "+weeks[0].getTitle());
-                db.weekDao().update(weeks[0]);
-                return weeks[0];
-            }
-
-            @Override
-            protected void onPostExecute(Week w) {
-                super.onPostExecute(w);
-                notifyItemChanged(getAdapterPosition());
-                // setAt(getAdapterPosition(),t);
-            }
-
-
-        }
     }
 }

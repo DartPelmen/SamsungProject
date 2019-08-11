@@ -4,16 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
-import androidx.room.PrimaryKey;
 
-import java.util.UUID;
-
-@Entity(tableName = "Week",foreignKeys = @ForeignKey(entity = TimeTable.class,parentColumns = "idTimeTable",childColumns = "TimeTableId",onDelete = ForeignKey.CASCADE,onUpdate = ForeignKey.CASCADE))
-public class Week{
-    @NonNull
-    @PrimaryKey
-    @ColumnInfo(name = "idWeek")
-    private String id;
+/*
+ * Модели для таблиц БД.
+ * Созданы на базе аннотаций в рамках библиотеки Room.
+ * Принцип работы аналогичен другим ORM.
+ * */
+@Entity(tableName = "Week",foreignKeys = @ForeignKey(entity = TimeTable.class,parentColumns = "id",childColumns = "TimeTableId",onDelete = ForeignKey.CASCADE,onUpdate = ForeignKey.CASCADE))
+public class Week extends Model{
     @NonNull
     @ColumnInfo(name = "Title")
     private String title;
@@ -21,17 +19,9 @@ public class Week{
     private String timetableId;
 
     public Week(@NonNull String title, String timetableId) {
-        this.id=UUID.randomUUID().toString().replace("-","").toUpperCase();
+        super();
         this.title = title;
         this.timetableId = timetableId;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getTitle() {
